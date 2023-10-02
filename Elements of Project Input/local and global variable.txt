@@ -1,0 +1,27 @@
+In C programming language, variables defined within some function are known as Local Variables and variables which are 
+defined outside of function block and are accessible to entire program are known as Global Variables.
+This article explains the difference between local and global variables.
+******************************************************************************************************************************
+==>Local Vs. Global Variable
+Those variables which are defined within some function and are accessible to that function only are called Local Variables.
+Those variables which are defined outside of function block and are accessible to entire program are known as Global Variables.
+Scope is local to that block or function where they are defined.
+Scope is global i.e. they can be used anywhere in the program.
+Default value is unpredictable (garbage).
+Default value is Zero (0).
+Example:
+#include<stdio.h>
+void main()
+{
+   int x=23, y=4;
+   printf(“x = %d and y=%d”,x,y);
+}
+Here x and y are local variables.
+**********************************************************************************************************************************
+#include<conio.h>
+int a=10,b;
+void main()
+{
+  printf(“a = %d and b=%d”,a,b);
+}
+Here a and b are global variables.

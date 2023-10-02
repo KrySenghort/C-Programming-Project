@@ -1,0 +1,182 @@
+The strcmp() Function in C
+the syntax of the strcmp() function is:
+Syntax: int strcmp (const char* str1, const char* str2);
+The strcmp() function is used to compare two strings two strings str1 and str2. If two strings are same then strcmp() returns 0, otherwise, it returns a non-zero value.
+This function compares strings character by character using ASCII value of the characters. The comparison stops when either end of the string is reached or corresponding characters are not same. The non-zero value returned on mismatch is the difference of the ASCII values of the non-matching characters of two strings.
+Let's see how strcmp() function compare strings using an example.
+strcmp("jkl", "jkq");
+Here we have two strings str1 = "jkl" and str2 = "jkq". Comparison starts off by comparing the first character from str1 and str2 i.e 'j' from "jkl" and 'j' from "jkm", as they are equal, the next two characters are compared i.e 'k' from "jkl" and 'k' from "jkm", as they are also equal, again the next two characters are compared i.e 'l' from "jkl" and 'q' from "jkm", as ASCII value of 'q' (113) is greater than that of 'l' (108), Therefore str2 is greater than str1 and strcmp() will return 5 ( i.e 113-108 = 5 ).
+It is important to note that not all systems return difference of the ASCII value of characters, On some systems if str1 is greater than str2 then 1 is returned. On the other hand, if str1 is smaller than str2 then -1 is returned. It is more likely that you will encounter this behaviour on your system.
+Let take some examples:
+ 1
+ 2
+ 3	4	5	6	7	8	9	10	11
+strcmp("a", "a"); // returns 0 as ASCII value of "a" and "a" are same i.e 97
+strcmp("a", "b"); // returns -1 as ASCII value of "a" (97) is less than "b" (98)
+strcmp("a", "c"); // returns -1 as ASCII value of "a" (97) is less than "c" (99)
+strcmp("z", "d"); // returns 1 as ASCII value of "z" (122) is greater than "d" (100)
+strcmp("abc", "abe"); // returns -1 as ASCII value of "c" (99) is less than "e" (101)
+strcmp("apples", "apple"); // returns 1 as ASCII value of "s" (115) is greater than "\0" (101)
+The following program compares two strings entered by the user.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26
+#include<stdio.h>
+#include<string.h>
+int main()
+{   char strg1[50], strg2[50];
+    printf("Enter first string: ");
+    gets(strg1);
+    printf("Enter second string: ");
+    gets(strg2);
+    if(strcmp(strg1, strg2)==0)
+    {  printf("\nYou entered the same string two times");    }
+else
+    {  printf("\nEntered strings are not same!");	}
+ // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1st run:
+1
+2
+3
+4
+Enter first string: compare
+Enter second string: compare
+You entered the same string two times
+2nd run:
+1
+2
+3
+4
+Enter first string: abc
+Enter second string: xyz
+Entered strings are not same!
+Relational operators with strings
+When a relational operator (>, <, >=, <=, ==, !=) is used with strings they behave in a slightly different way. Consider the following example:
+1
+2
+char *s1 = "hello";
+char *s2 = "yello";
+Can you guess what the following expression does?
+
+s1 == s2
+This expression compares the addresses of strings pointed by s1 and s2 not the contents of string literals.
+
+The following example demonstrates this behaviour.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18
+*************************************************************************************************************************************************************
+#include<stdio.h>
+#include<string.h>
+int main()
+{   char *s1 = "hello";
+    char *s2 = "world";
+    printf("Address of string pointed by s1 = %u\n", s1);
+    printf("Address of string pointed by s2 = %u\n\n", s2);
+    printf("Is s1 == s2 ? %u\n", s1 == s2);
+    printf("Is s1 > s2 ? %u\n", s1 > s2);
+    printf("Is s1 < s2 ? %u\n", s1 < s2);
+// signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1
+2
+3
+4
+5
+6
+Address of string pointed by s1 = 4206592
+Address of string pointed by s2 = 4206598
+Is s1 == s2 ? 0
+Is s1 > s2 ? 0
+Is s1 < s2 ? 1
+Let's get back to our original discussion, and try creating our own version of strcmp() function.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18
+int my_strcmp(char *strg1, char *strg2)
+{   while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 )
+    {   strg1++;	strg2++;	}
+if(*strg1 == *strg2)
+    {    return 0; // strings are identical	}
+else
+    {	 return *strg1 - *strg2;	}	}
+How it works:
+The my_strcmp() function accepts two arguments of type pointers to char and returns an integer value. The condition in while loop may look a little intimidating so let me explain it.
+( *strg1 != '\0' && *strg2 != '\0' ) && (*strg1 == *strg2)
+The condition simply says keep looping until the end of the string is not reached and corresponding characters are same.
+Let's say my_strcmp() is called with two arguments "abc" (strg1) and "abz" (strg2), where strg1 points to the address 2000 and strg2 points to the address 3000.
+1st Iteration
+In the first iteration both strg1 and strg2 points to the address of the character 'a'. So
+*strg1 returns 'a'
+*strg2 returns 'a'
+while condition is tested:
+( 'a' != '\0' && 'a' != '\0' ) && ('a' == 'a')
+As the condition is true, the statements inside the body of the loop are executed. Now strg1 points to address 2001 and strg2 points to address 3001. This ends the 1st iteration.
+2nd Iteration
+In the second iteration both strg1 and strg2 points to the address of the character 'b'. So
+*strg1 returns 'b'
+*strg2 returns 'b'
+while condition is tested again:
+( 'b' != '\0' && 'b' != '\0' ) && ('b' == 'b')
+As the condition is true, the statements inside the body of the loop are executed once more. Now strg1 points to address 2002 and strg2 points to address 3002. This ends the 2nd iteration.
+3rd Iteration
+In the third iteration both strg1 and strg2 points to the address of character 'c' and 'z' respectively. So
+*strg1 returns 'c'
+*strg2 returns 'z'
+while condition is tested again:
+( 'c' != '\0' && 'z' != '\0' ) && ('c' == 'z')
+The while condition becomes false and the control breaks out of while loop. if condition following the while loop is checked.
+1
+2
+3
+4
+if( *strg1 == *strg2)
+{  return 0;  // strings are identical	}
+Since
+*strg1 returns 'c'
+*strg2 returns 'z'
+Therefore the condition 'c' == 'z' is false. Control comes to the else block and the following statement is executed.
+return *strg1 - *strg2;
+The expression *strg1 - *strg2 evaluates the difference of the ASCII value of characters.
+1
+2
+3
+4
+*strg1 - *strg2
+=> 'c' - 'z'
+=> 99 - 122
+=> -23
+at last -23 is returned to the calling function.
+The following program demonstrates our new string comparison function my_strcmp().
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36
+#include<stdio.h>
+int my_strcmp(char *strg1, char *strg2);
+*********************************************************************************************************************************************************************
+int main()
+{   printf("strcmp(\"a\", \"a\") = %d\n", my_strcmp("a", "a") );
+    printf("strcmp(\"a\", \"b\") = %d\n", my_strcmp("a", "b") );
+    printf("strcmp(\"a\", \"c\") = %d\n", my_strcmp("a", "c") );
+    printf("strcmp(\"z\", \"d\") = %d\n", my_strcmp("z", "d") );
+    printf("strcmp(\"abc\", \"abe\") = %d\n", my_strcmp("abc", "abe") );
+    printf("strcmp(\"apples\", \"apple\") = %d\n", my_strcmp("apples", "apple") );
+// signal to operating system program ran fine
+    return 0;	}
+int my_strcmp(char *strg1, char *strg2)
+{	while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 )
+    {	strg1++;
+        strg2++;	}
+    if(*strg1 == *strg2)
+    {    return 0; // strings are identical	}
+    else
+    {	 return *strg1 - *strg2;	}	}
+Expected Output:
+1
+2
+3
+4
+5
+6
+strcmp("a", "a") = 0
+strcmp("a", "b") = -1
+strcmp("a", "c") = -2
+strcmp("z", "d") = 22
+strcmp("abc", "abe") = -2
+strcmp("apples", "apple") = 115
+As you can see, the my_strcmp() returns ASCII value of mismatched characters. As a homework modify this function so that it returns 1 if strg1 is greater than strg2 and -1 if strg1 is smaller than strg2.

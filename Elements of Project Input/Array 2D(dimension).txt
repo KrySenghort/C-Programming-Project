@@ -1,0 +1,133 @@
+Passing 2-D Array to a Function in C
+Just like a 1-D array, when a 2-D array is passed to a function, the changes made by function effect the original array. But before we study this, I want to make a few points clear.
+We have learned that in chapter Two Dimensional Array in C that when a 2-D is passed to a function it is optional to specify the size of the left most dimensions. So if we have an array of 2 rows and 3 dimensions then it can be passed to a function in the following two ways:
+1
+2
+3
+4
+int two_d[2][3] = {  {99,44,11},  {4,66,9}  };
+1st way:
+
+1
+2
+3
+4
+void function(int a[][3])
+{ // statements; }
+2nd way:
+1
+2
+3
+4
+void function(int a[2][3])
+{  // statements; }
+Recall that 2-D arrays are stored in row-major order i.e first row 0 is stored, then next to it row 1 is stored and so on. Therefore in C, a 2-D array is actually a 1-D array in which each element is itself a 1-D array. Since the name of the array points to the 0th element of the array. In the case of a 2-D array, 0th element is an array. Therefore, from this discussion, we can conclude that two_d is a pointer to an array of 3 integers.
+Hence we can also declare a function where the formal argument is of type pointer to an array.
+3rd way:
+1
+2
+3
+4
+void function(int (*a)[3])
+{ // statements; }
+Essentially in all the three cases discussed the type of the variable a is a pointer to an array of 3 integers, they differ only in the way they are represented.
+Okay let's get back to our original discussion - Why the changes made by the function effect the original array? The following program answers this question.
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+#include<stdio.h>
+void change_twod(int (*a)[3]);
+int main()
+{   int i,j, two_d[2][3] = {    {99,44,11},  {4,66,9}     };
+    printf("Original array: \n\n");
+    for(i = 0; i < 2; i++)
+    {   for(j = 0; j < 3; j++)
+    {   printf("%3d ", two_d[i][j]);  }
+        printf("\n");    }
+    change_twod(two_d);
+    printf("\n\nModified array : \n\n");
+    for(i = 0; i < 2; i++)
+    {   for(j = 0; j < 3; j++)
+ {      printf("%3d ", two_d[i][j]);   }
+        printf("\n");    }
+ // signal to operating system everything works fine
+    return 0; }
+void change_twod(int (*arr)[3])
+{   int i, j;
+    printf("\n\nIncrementing every element by 5\n");
+ // increment original elements by 6
+    for(i = 0; i < 2; i++)
+    {   for(j = 0; j < 3; j++)
+    {   arr[i][j] = arr[i][j] + 5;	}	}	}
+Expected Output:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+Original array:
+99 44 11
+4 66 9
+Incrementing every element by 5
+Modified array :
+104 49 16
+9 71 14
+How it works:
+As discussed earlier in this section that two_d and arr are of type pointer to an array of 3 integers. In line 25, change_twod() is called with an actual argument of two_d which is then assigned to arr. Now both two_d and arr points to the same 2-D array, as a result, changes made inside the function will be visible in the function main().

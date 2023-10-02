@@ -1,0 +1,161 @@
+Pointers and 1-D arrays
+In C, the elements of an array are stored in contiguous memory locations. For example: if we have the following array.
+int my_arr[5] = {1, 2, 3, 4, 5};
+Then, this is how elements are stored in the array.
+Here the first element is at address 5000, since each integer takes 4 bytes the next element is at 5004 and so on.
+In C, pointers and arrays are very closely related. We can access the elements of the array using a pointer. Behind the scenes compiler also access elements of the array using pointer notation rather than subscript notation because accessing elements using pointer is very efficient as compared to subscript notation. The most important thing to remember about the array is this:
+The name of the array is a constant pointer that points to the address of the first element of the array or the base address of the array.
+We can use subscript notation (i.e using square brackets) to find the address of the elements of the array. For example:
+int my_arr[5] = {11, 22, 33, 44, 55};
+here &my_arr[0] points to the address of the first element of the array. Since the name of the array is a constant pointer that points to the first element of the array, my_arr and &my_arr[0] represent the same address. &my_arr[1] points to the address of the second element. Similarly &my_arr[2] points to the address of the third element and so on.
+Note: my_arr is of type (int *) or pointer to int.
+The following program demonstrates that the elements of an array are stored in contiguous memory locations.
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+#include<stdio.h>
+int main()
+{   int my_arr[5] = {1, 2, 3, 4, 5}, i;
+    for(i = 0; i < 5; i++)
+    {   printf("Value of a[%d] = %d\t", i, my_arr[i]);
+        printf("Address of a[%d] = %u\n", i, &my_arr[i]);    }
+ // signal to operating system program ran fine
+    return 0;}
+Expected Output:
+1
+2
+3
+4
+5
+Value of a[0] = 1 Address of a[0] = 2293312
+Value of a[1] = 2 Address of a[1] = 2293316
+Value of a[2] = 3 Address of a[2] = 2293320
+Value of a[3] = 4 Address of a[3] = 2293324
+Value of a[4] = 5 Address of a[4] = 2293328
+Note: Memory address may differ every time you run the program.
+Using pointers to access elements and address of elements in an array
+We know that name of the array is a constant pointer to the first element. Consider the following snippet:
+int arr[] = {1,2,3,4,5};
+Here arr is a pointer to the first element. But, What is the base type of pointer arr ? If your answer is a pointer to int or (int *). Well, Done ;).
+In this case, arr points to the address of an integer number i.e address of integer 1. So the base type of arr is a pointer to int or (int*).
+Let's take some more examples:
+char arr[] = {'A','B','C','D','E'};
+What is the type of pointer arr ?.
+Here arr points to the address of the first element which is a character. So the type of arr is a pointer to char or (char *).
+Similarly,
+double arr[] = {1.03, 29.3, 3.42, 49.3, 51.2};
+here arr is a pointer of type pointer to double or (double *).
+Note: These concepts are the building blocks for the upcoming chapters, so don't skip them. If it is still confusing to you, go through it one more time.
+Now you can easily access values and address of elements using pointer arithmetic. Suppose my_arr is an array of 5 integers.
+int my_arr[5] = {11, 22, 33, 44, 55};
+Here my_arr is a constant pointer of base type pointer to int or (int *) and according to pointer arithmetic when an integer is added to a pointer we get the address of the next element of same base type. So In the above example my_arr points to the address of the first element, my_arr+1 points to the address of the second element, my_arr + 2 points to the address of the third element and so on. Therefore we can conclude that:
+my_arr is same as &my_arr[0]
+my_arr + 1 is same as &my_arr[1]
+my_arr + 2 is same as &my_arr[2]
+my_arr + 3 is same as &my_arr[3]
+my_arr + 4 is same as &my_arr[4]
+In general (my_arr + i) is same as writing &my_arr[i].
+Now we know how to get the address of each element of the array, by using indirection operator (*) we can get the value at the address. If we dereference my_arr then we get the first element of the array i.e *my_arr. Similarly, *(my_arr + 1) will return the second element of the array and so on.
+*(my_arr) is same as my_arr[0]
+*(my_arr + 1) is same as my_arr[1]
+*(my_arr + 2) is same as my_arr[2]
+*(my_arr + 3) is same as my_arr[3]
+*(my_arr + 4) is same as my_arr[4]
+In general *(my_arr+i) is same as writing my_arr[i].
+The following program prints value and address of array elements using pointer notation.
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+#include<stdio.h>
+int main()
+{   int my_arr[5] = {1, 2, 3, 4, 5}, i;
+    for(i = 0; i < 5; i++)
+    {   printf("Value of a[%d] = %d\t", i, *(my_arr + i) );
+        printf("Address of a[%d] = %u\n", i, my_arr + i );    }
+ // signal to operating system program ran fine
+    return 0; }
+Expected Output:
+1
+2
+3
+4
+5
+Value of a[0] = 1 Address of a[0] = 2293312
+Value of a[1] = 2 Address of a[1] = 2293316
+Value of a[2] = 3 Address of a[2] = 2293320
+Value of a[3] = 4 Address of a[3] = 2293324
+Value of a[4] = 5 Address of a[4] = 2293328
+Note: Memory address may differ every time you run the program.
+Assigning 1-D array to a Pointer variable
+Yes, you can assign a 1-D array to a pointer variable. Consider the following example:
+1
+2
+3
+int *p;
+int my_arr[] = {11, 22, 33, 44, 55};
+p = my_arr;
+Now you can use pointer p to access address and value of each element in the array. It is important to note that assignment of a 1-D array to a pointer to int is possible because my_arr and p are of the same base type i.e pointer to int. In general (p+i) denotes the address of the ith element and *(p+i) denotes the value of the ith element.
+There are some differences between the name of the array (i.e my_arr) and pointer variable (i.e p). The name of the array is a constant pointer hence you can't alter it to point to some other memory location. You can’t assign some other address to it nor you can apply increment/decrement operator like you do in a pointer variable.
+1
+2
+3
+my_arr++; // error
+my_arr--; // error
+my_arr = &i // error
+However, p is an ordinary pointer variable, so you can apply pointer arithmetic and even assign a new address to it.
+1
+2
+3
+p++; // ok
+p--; // ok
+p = &i // ok
+The following program demonstrates how you can access values as address of elements of a 1-D array by assigning it to a pointer variable.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18
+#include<stdio.h>
+int main()
+{   int my_arr[5] = {1, 2, 3, 4, 5}, i;
+    int *p;
+    p = my_arr;
+ // p = &my_arr[0]; // you can also do this
+    for(i = 0; i < 5; i++)
+    {   printf("Value of a[%d] = %d\t", i, *(p + i) );
+        printf("Address of a[%d] = %u\n", i, p + i );    }
+ // signal to operating system program ran fine
+    return 0;}
+Expected Output:
+1
+2
+3
+4
+5
+Value of a[0] = 1 Address of a[0] = 2293296
+Value of a[1] = 2 Address of a[1] = 2293300
+Value of a[2] = 3 Address of a[2] = 2293304
+Value of a[3] = 4 Address of a[3] = 2293308
+Value of a[4] = 5 Address of a[4] = 2293312
+Note: Memory address may differ every time you run the program.

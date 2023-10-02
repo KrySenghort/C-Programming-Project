@@ -1,0 +1,113 @@
+The malloc() Function in C
+Up until now in our programs, we have been using static memory allocation. In static memory allocation the size of the program is fixed, we can not increase or decrease size while the program is running. So why would we actually want to increase or decrease the size of the program while the program is running?
+Consider the following situation.
+Let's say we are creating a program to calculate the average marks of student in a class. Here is one way to approach the problem.
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26
+#include<stdio.h>
+#define STUDENT 100
+int main()
+{    float marks[STUDENT], sum = 0;
+    int i;
+    for(i = 0; i < STUDENT; i++)
+    {   printf("Enter marks for %d student: ", i+1);
+        scanf("%f", &marks[i]); }
+    // calculate sum
+    for(i = 0; i < STUDENT; i++){ 
+	sum += marks[i];	}
+    printf("\nAverage marks = %.2f\n", sum/STUDENT );
+    // signal to operating system everything works fine
+   return 0;	}
+The important thing to notice about the program is the size of the student is fixed which is 100.
+At this point, two types of problem may arise. Let's say 20 more students joined the class ? Since our program can only handle 100 students, 
+one way to solve this problem is to change the size of student, recompile and run the program again. 
+What if after some time 50 more students joined the class, then we have to modify the program and recompile again. Certainly, this is not the ideal way.
+Let's face another side of the coin. What if 40 students left the class. In this case number of values to be stored is less than the size of the array,
+so (40*4 = 160 bytes) memory would be wasted.
+As you can see our program due to fixed size of the array facing two major shortcomings.
+So what's the solution?
+The solution is to use dynamic memory allocation. It simply means that we can allocate/release memory whenever we need while the program is running.
+The allocation/release of memory is done with the help of three functions defined in header file stdlib.h.
+Whenever you call these functions they take memory from a memory area called heap and release the memory whenever not required, so it can be reused.
+The malloc() function
+It is used to allocate memory at run time. The syntax of the function is:
+Syntax: void *malloc(size_t size);
+This function accepts a single argument called size which is of type size_t. The size_t is defined as unsigned int in stdlib.h, for now,
+you can think of it as an alias to unsigned int.
+If successful, malloc() returns a void pointer to the first allocated byte of memory. Before you can use the pointer you must cast it to appropriate type.
+So malloc() function is generally used as follows:
+p = (datatype *)malloc(size);
+where the p is a pointer of type (datatype *) and size is memory space in bytes you want to allocate.
+Let's take a simple example:
+Suppose we want to allocate 20 bytes(for storing 5 integers, where the size of each integer is 4 bytes) dynamically using malloc(). Here is how we can do it:
+1
+2
+int *p; // p is pointer to int or (int*)
+p = (int*)malloc(20); // allocate 20 bytes
+This statement allocates 20 contiguous bytes of memory from the heap and assigns the address of the first byte to variable p.
+Notice how void pointer returned from the malloc() function is typecasted and then assigned to p. 
+Memory allocated contains garbage value so do not try to dereference it before assigning proper values to it.
+As we know the size of data types in C vary from system to system, that's why malloc() function is used in conjunction with the sizeof operator.
+1
+2
+int *p; // p is pointer to int or (int*)
+p = (int*)malloc(5*sizeof(int)); // allocate sufficient memory for 5 integers
+We are still allocating 20 bytes of memory but now our program is portable (i.e it can be run on the various operating system without any modification.) 
+and certainly more readable.
+Now we have p pointing to the first byte of allocated memory, we can easily access subsequent bytes using pointer arithmetic.
+When the heap runs out of free space, malloc() function returns NULL. So before using the pointer variable in any way,
+we must first always check the value returned by malloc() function.
+1	2	3	4	5
+if(p==NULL)
+{   printf("Memory allocation failed");
+    exit(1); // exit the program	}
+Let's rewrite the program to calculate the average marks of students in a class using the malloc() function.
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{    float *p, sum = 0;
+    int i, n;
+    printf("Enter the number of students: ");
+    scanf("%d", &n);
+    // allocate memory to store n variables of type float
+    p = (float*)malloc(n*sizeof(float));
+    // if dynamic allocation failed exit the program
+    if(p==NULL)
+    {   printf("Memory allocation failed");
+        exit(1); // exit the program   }
+    // ask the student to enter marks
+    for(i = 0; i < n; i++)
+    {   printf("Enter marks for %d student: ", i+1);
+        scanf("%f", p+i); }
+    // calculate sum
+    for(i = 0; i < n; i++)
+    {   sum += *(p+i); }
+    printf("\nAverage marks = %.2f\n", sum/n);
+    // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14
+Enter the number of students: 4
+Enter marks for 1 student: 12.12
+Enter marks for 2 student: 34.14
+Enter marks for 3 student: 43.1
+Enter marks for 4 student: 45.87
+Average marks = 33.81
+2nd run:
+Enter the number of students: 2
+Enter marks for 1 student: 13.41
+Enter marks for 2 student: 56.31
+Average marks = 34.86
+How it works:
+In line 6, we have declared a pointer to float p and a float variable s, where it is initialized to 0.
+In line 7, we have declared two variables i and n of type int.
+In line 9, printf() function prints "Enter the number of students: " to the console.
+In line 10, scanf() is used to read input from the user, which is then stored in a variable n.
+Line 12 uses malloc() function to dynamically allocate memory to store n numbers of type float. The variable p is of type pointer to float or (float*), 
+that's why the result of malloc() function is typecasted using (float*).
+In line 15, the if condition checks whether the pointer returned by malloc() is null pointer or not.
+If p is NULL then memory allocation failed and the program terminates.
+In line 21, we have a for loop which repeatedly asks the user to enter marks n times.
+Notice that in scanf() statement p + i is used without & sign because p is a pointer.
+In line 29, we have another for loop which accumulates the marks of n students in a variable sum.
+In line 34, Average marks are displayed by dividing total marks by a total number of students.

@@ -1,0 +1,141 @@
+Basics of File Handling in C
+All the programs we have created so far are severely limited in the sense that they can't read and write data to and from the file. Most of the real-world program would require to read and write data to and from the file. In this chapter, we will learn how to perform input and output operations in a file.
+C provides a wide range of functions in the header file stdio.h for reading and writing data to and from the file. Text and Binary Mode We can store data into files in two ways:
+Text mode.
+Binary mode.
+In Text mode, data is stored as a line of characters terminated by a newline character ('\n') where each character occupies 1 byte. To store 1234 in a text file would take 4 bytes, 1 byte for each character. The important thing to note in the Text mode what gets stored in the memory is that binary equivalent of the ASCII number of the character. 
+Here is how 123456 is stored in the file in text mode.
+As you can see it takes 6 bytes to store 123456 in text mode.
+In binary mode, data is stored on a disk in the same way as it is represented in computer memory. As a result, storing 123456 in a binary mode would take only 2 bytes. In Linux systems, there is no difference between text mode and binary mode. Here is how 123456 is stored in the file in binary mode.
+Hence by using binary mode, we can save a lot of disk space.
+In the text file, each line is terminated by one or two special characters. In Windows system, each line ends with a carriage return ('\r') immediately followed by a newline ('\n') character. On the other hand in Unix, Linux and Mac operating systems each line ends with as single newline ('\n') character.
+Text file as well as binary files keep track of the length of the file and also track end of the file. But in the text file, there is one more way to detect the end of the file. The text file may contain a special end of file marker having ASCII value of 26. 
+All input/output functions stop reading from a file when this character is encountered and return an end of file signal to the program. No input/output functions insert this character automatically. 
+In Windows, you can insert this character into the file using Ctrl+Z. It is important to note that there is no requirement that Ctrl+Z must be present, but if it is, it is considered as the end of the file. Any characters after Ctrl+Z will not be read. On the other hand, Operating systems based upon Unix have so such special end of file character.
+Another important thing you need to remember is that text files are portable. It means you can create a text file using Windows and open it a Linux system without any problem. On the other hand, the size of the data types and byte order may vary from system to system, as a result, binary files are not portable.
+Buffer Memory
+Reading and writing to and from the files stored in the disk is relatively slow process when compared to reading and writing data stored in the RAM. As a result, all standard input/output functions uses something called buffer memory to store the data temporarily.
+The buffer memory is a memory where data is temporarily stored before it is written to the file. When the buffer memory is full the data is written(flushed) to the file. Also when the file is closed the data in the buffer memory is automatically written to the file even if the buffer is full or not. This process is called flushing the buffer.
+You don't have to do any anything to create buffer memory. As soon as you open a file, a buffer memory will be created for you automatically behind the scenes. However, there are some rare occasions when you have to flush the buffer manually. If so, you call use fflush() function as described later.
+Opening a File
+Before any I/O (short of input/output) can be performed on a file you must open the file first. fopen() function is used to open a file.
+Syntax: FILE *fopen(const char *filename, const char *mode);
+filename: string containing the name of the file.
+mode: It specifies what you want to do with the file i.e read, write, append.
+On Success fopen() function returns a pointer to the structure of type FILE. FILE structure is defined in stdio.h and contains information about the file like name, size, buffer size, current position, end of file etc.
+On error fopen() function returns NULL.
+The possible value of modes are:
+"w" (write) - This mode is used to write data to the file. If the file doesn't exist this mode creates a new file. If the file already exists then this mode first clears the data inside the file before writing anything to it.
+"a" (append) - This mode is called append mode. If the file doesn't exist this mode creates a new file. If the file already exists then this mode appends new data to end of the file.
+"r" (read) - This mode opens the file for reading. To open a file in this mode file must already exist. This mode doesn't modify the contents of the file in anyway. Use this mode if you only want to read the contents of the file.
+"w+" (write + read) - This mode is a same as "w" but in this mode, you can also read the data. If the file doesn't exist this mode creates a new file. If the file already exists then previous data is erased before writing new data.
+"r+" (read + write) - This mode is same as "r" mode , but you can also modify the contents of the file. To open the file in this mode file must already exist. You can modify data in this mode but the previous contents of the file are not erased. This mode is also called update mode.
+"a+" (append + read) - This mode is same as "a" mode but in this mode, you can also read data from the file. If the file doesn't exist then a new file is created. If the file already exists then the new data is appended to the end of the file. Note that in this mode you can append data but can't modify existing data.
+To open the file in binary mode you need to append "b" to the mode like this:
+Mode	Description
+"wb"	Open the file in binary mode
+"a+b" or "ab+"	Open the file in append + read in binary mode
+To open a file in text mode you can append "t" to the mode. But since text mode is the default mode "t" is generally omitted.
+Mode	Descriptions
+"w" or "wt"	Open a file for writing in text mode
+"r" or "rt"	Open a file for reading in text mode.
+Note: mode is a string so you must always use double quotes around it.
+1
+2
+fopen("somefile.txt", 'r'); // Error
+fopen("somefile.txt", "r"); // Ok
+If you want to open several files at once, then they must have their own file pointer variable created using a separate call to fopen() function.
+1
+2
+3
+File fp1 = fopen("readme1.txt", 'r');
+File fp2 = fopen("readme2.txt", 'r');
+File fp3 = fopen("readme3.txt", 'r');
+Here we are creating 3 file pointers for the purpose of reading three files.
+Checking for Errors
+As already said fopen() returns NULL when an error is encountered in opening a file. So you before doing any operation on the file you must always check for errors.
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+// Checking for errors
+File *fp;
+fp = fopen("somefile.txt", "r");
+if(fp == NULL)
+{   // if error opening the file show error message and exit the program
+    printf("Error opening a file");
+    exit(1); }
+We can also give the full path name to fopen() function. Suppose we want to open a file list.txt located in /home/downloads/ .Here is how to specify pathname in fopen().
+fp = fopen("/home/downloads/list.txt", "r");
+It is important to note that Windows uses backslash character ('\') as a directory separator but since C treats backslash as the beginning of escape sequence we can't directly use '\' character inside the string. To solve this problem use two '\' in place of one '\' .
+1
+2
+fp = fopen("C:\home\downloads\list.txt", "r");    // Error
+fp = fopen("C:\\home\\downloads\\list.txt", "r"); // ok
+The other technique is to use forward slash ('/') instead of a backward slash ('\').
+fp = fopen("C:/home/downloads/list.txt", "r");
+Closing a File
+When you are done working with a file you should close it immediately using the fclose() function.
+Syntax: int fclose(FILE *fp);
+When a file is closed all the buffers associated with it are flushed i.e data in the buffer is written to file.
+Closing the file through fclose() is not mandatory, because as soon as the program ends all files are closed immediately. But it is good practice to close the file as soon you are finished working with it. Otherwise, in a large program, you would be wasting a lot of space to unused file pointers.
+On success fclose() returns 0, on error, it returns EOF i.e End Of File which is a constant defined in stdio.h and its value is -1.
+If you have more than one files opened, then you have to close them separately like this:
+1
+2
+fclose(fp1);
+fclose(fp2);
+You can also use fcloseall() function to close all opened files at once.
+On success fcloseall() returns the number of files closed, on error, it returns EOF.
+Here is how we can check whether all files are closed or not.
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+// check whether all files are closed or not
+n = fcloseall();
+if(n == EOF)
+{  printf("Error in closing some files \n"); }
+else
+{  printf("%d files closed \n", n);  }
+End Of File - EOF
+File reading functions need to know when the end of the file is reached. So when the end of file is reached the operating system sends an end of file or EOF signal to the program to stop reading. When the program receives the signal the file reading functions stops reading the file and returns EOF. As already said EOF is a constant defined in stdio.h header file and has a numerical value of -1. It is important to understand that EOF is not a character present at the end of the file instead it is returned by the file reading functions when the end of the file is reached.
+Basic workflow of a file program in C
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+// Basic workflow of a file program in C
+int main()
+{   FILE *fp; // declare file pointer variable
+    fp = fopen("somefile.txt", "w"); // fopen() function called
+    /*
+    do something here
+    */
+    fclose(fp); // close the file  }

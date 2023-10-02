@@ -1,0 +1,32 @@
+Array of Pointers in C
+Last updated on July 27, 2020
+Just like we can declare an array of int, float or char etc, we can also declare an array of pointers, here is the syntax to do the same.
+Syntax: datatype *array_name[size];
+Let's take an example:
+int *arrop[5];
+Here arrop is an array of 5 integer pointers. It means that this array can hold the address of 5 integer variables. In other words, you can assign 5 pointer variables of type pointer to int to the elements of this array.
+The following program demonstrates how to use an array of pointers.
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19
+#include<stdio.h>
+#define SIZE 10
+int main()
+{   int *arrop[3];
+    int a = 10, b = 20, c = 50, i;
+    arrop[0] = &a;
+    arrop[1] = &b;
+    arrop[2] = &c;
+    for(i = 0; i < 3; i++)
+    {	printf("Address = %d\t Value = %d\n", arrop[i], *arrop[i]);	}
+    return 0;	}
+Expected Output:
+1
+2
+3
+Address = 387130656      Value = 10
+Address = 387130660      Value = 20
+Address = 387130664      Value = 50
+How it works:
+Notice how we are assigning the addresses of a, b and c. In line 9, we are assigning the address of variable a to the 0th element of the of the array. Similarly, the address of b and c is assigned to 1st and 2nd element respectively. At this point, the arrop looks something like this:
+arrop[i] gives the address of ith element of the array. So arrop[0] returns address of variable a, arrop[1] returns address of b and so on. To get the value at address use indirection operator (*).
+*arrop[i]
+So, *arrop[0] gives value at address arrop[0], Similarly *arrop[1] gives the value at address arrop[1] and so on.

@@ -1,0 +1,261 @@
+Introduction to Nested Loop in C
+As the name already suggests, a loop inside a loop is called Nested Loop. There can be any number of loops inside a loop. We know there are generally many looping conditions like for, while, and do-while. We can loop different kinds of loops within each other to form nested loops. C language supports this functionality of Nested Loops. below is the syntax of Nested Loop in C.
+Syntax:
+Outside_loop
+{ //Outside Loop Statements
+   Inside_loop
+{//Inside loop Statements }  }
+The above syntax is a single loop condition inside a loop condition. In this way, there can be many conditions too.
+Outside_loop
+{ //Outside Loop Statements
+Inside_loop_1
+{ //Inside loop 1 Statements }
+Inside_loop_2
+{ //Inside loop 2 statements }
+Inside_loop_3
+{ //Inside loop 3 statements }
+……… continues  }
+Flowchart of Nested Loop
+Here, let us see the actual process flow in the case of these nested loops.
+Nested Loop Flowchart
+In the above flow chart, we can see that there are two conditions that are given. The inner loop condition gets executed only when the outer loop condition gives the Boolean output as True. 
+Else the flow control directly goes out of both the loops. Now coming into the inner loop execution, If the loop condition gives a true result, then the block of statements under that loop and the incremental condition gets executed. And in turn, if the condition gives a Boolean condition as False, then the inner loop gives its control back to the outer loop, and again same conditions/loops gets executed/repeated.
+Popular Course in this category Sale
+C Programming Training (3 Courses, 5 Project)
+3 Online Courses | 5 Hands-on Projects | 34+ Hours | Verifiable Certificate of Completion | Lifetime Access
+4.5 (8,176 ratings)Course Price
+$79 $399
+View Course
+Related Courses
+C++ Training (4 Courses, 5 Projects, 4 Quizzes)Java Training (40 Courses, 29 Projects, 4 Quizzes)
+Examples to Implement Nested Loop in C
+Let us see below a few examples of the functionality of nested for loops in C and understand how it works through programs.
+Example #1
+Nested loop in ‘for’ condition. This we can generally use for creating or printing a multi-dimensional array.
+Code:
+************************************************************************************************************************************************************************
+#include <stdio.h>
+int main()
+{  int i,j,x,y;
+   int a[10][10];
+printf("Enter value for x(rows)- max of 10: ");
+scanf("%d", &x);
+printf("Enter value for y(columns) - max of 10: ");
+scanf("%d",&y);
+printf("Let's create a 2-D array: ");
+   for(i=0;i<x;i++)
+{  
+  for(j=0;j<y;j++)
+{
+scanf("%d",&a[i][j]); }   }
+printf("Now printing the array: ");
+printf("\n");
+for(i=0;i<x;i++)
+{
+for(j=0;j<y;j++)
+{
+printf("\t");
+printf("%d",a[i][j]);
+}
+printf("\n");
+}
+return 0;
+}
+Output:
+Nested Loop in C Example 1
+Let us see how the above example code works:
+-Firstly, we declare the integer values for defining the number of rows and columns.
+-Next, the array declaration is done.
+We then have to take the inputs from the user as per the values specified for the number of rows and columns.
+The user input is taken with the help of ‘two for loops’ as we are creating a 2-D array.
+The first ‘for-loop’ is for the number of rows and the second loop is for the columns.
+In taking a user input for an array, we are considering it as a row by row concept.
+So, when all the columns in the first row are completely filled, the compiler point would then increment come to the next row by which all the columns are filled, and the process continues.
+The same process flow continues for the loops for printing the respective output in an array format.
+In this manner, the nested loops are implemented. Now, let us have another example for nested loops.
+Example #2
+Code:
+********************************************************************************************************************************
+#include <stdio.h>
+int main()
+{  int x,y;
+   int k=1;
+printf("Enter the number of rows: ");
+scanf("%d", &x);
+printf("Enter the number of columns: ");
+scanf("%d", &y);
+int a[x][y];
+int i=1;
+while(i<=x) {
+int j=1;
+while(j<=y) {
+printf("%d\t",k);
+k++;
+j++;  }
+i++;
+printf("\n"); } }
+As seen above, we had created another 2-D array using “while loop”.
+Output:
+while loop Example 2
+The same level compilation as to the ‘for loop’ is being done. Once the outer while loop gets a Boolean “True” as the output, the next compilation code goes into the inner condition. 
+Once the inner condition gives the output as “False”, the assignment again reaches the outer loop condition.
+Example #3
+Here, we will have a small inter mixture of for loops program.
+Code:
+*****************************************************************************************************************************************************
+#include <stdio.h>
+int main()
+{  int n=1;
+   int i;
+while(n<5)
+{  printf("*");
+   printf("\n");
+n=n+1;
+for(i=1;i<n;i++)
+{ printf("$"); } } }
+***************************************************************************************************************************************************************
+Output:
+Nested Loop in C Example 3
+In the above program, as you have noticed, we had printed two different symbols, one after the other using while and for loop together. The combination of using different nested loops plays an important role in writing different level programs.
+Example #4
+Let us even look into an example dealing with the do-while nested loop. This example also lets print some random pattern.
+Code:
+****************************************************************************************************************************************************************
+#include <stdio.h>
+int main()
+{ int n=1;
+  int i=0;
+do
+{  printf("$");
+   printf("\n");
+   n=n+1;
+do{
+printf("*");
+i=i+1;
+}while(i<n);
+}while(n<5); }
+*****************************************************************************************************************************************************************
+Output:
+do-while Example 5
+In the above program also, we have used nested do-while loops to print a pattern based on the given inputs.
+NOTE: As an exercise, try possibilities in many ways of handling different loops together.
+Conclusion
+Here, we got the basic syntax and understood a few examples with respect to different nested functions. We had learned how actually there would be the process flow through a flow chart and explained the working of a nested ‘for’ loop.  
+So, keep practicing and enjoy learning C.
+Recommended Articles
+This is a guide to Nested Loop in C. Here we discuss the Introduction to Nested Loop in C and its examples, along with the flowchart of the nested loop. 
+You can also go through our
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+************************************************************************************************************************************************************************
+Nested loop in C
+A loop inside another loop is called a nested loop. The depth of nested loop depends on the complexity of a problem. We can have any number of nested loops as required. Consider a nested loop where the outer loop runs n times and consists of another loop inside it. The inner loop runs m times. Then, the total number of times the inner loop runs during the program execution is n*m.
+Types of nested loops
+Nested while loop
+Nested do-while loop
+Nested for loop
+Note: There can be mixed type of nested loop i.e. a for loop inside a while loop, or a while loop inside a do-while loop.
+************************************
+Nested while loop
+A while loop inside another while loop is called nested while loop.
+Syntax of Nested while loop
+while (condition1)
+{   statement(s);
+    while (condition2)
+    {
+        statement(s);
+        ... ... ...
+    }
+    ... ... ... }
+Flowchart of Nested while loop
+flowchart of nested while loop in c programming
+Example of Nested while loop
+Example 1: C program to print the number pattern.
+1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5
+#include <stdio.h>
+int main()
+{   int i=1,j;
+    while (i <= 5)
+    {   j=1;
+        while (j <= i )
+        {   printf("%d ",j);
+            j++;        }
+        printf("n");
+        i++;    }
+    return 0;   }
+In this program, nested while loop is used to print the pattern. The outermost loop runs 5 times and for every loop, the innermost loop runs i times which is 1 at first, meaning only “1” is printed, then on the next loop it’s 2 numbers printing “1 2” and so on till 5 iterations of the loop executes, printing “1 2 3 4 5”. This way, the given number pattern is printed.
+Nested do-while loop
+A do-while loop inside another do-while loop is called nested do-while loop.
+Syntax of Nested do-while loop
+do{ statement(s);
+    do
+    {   statement(s);
+        ... ... ...
+    }while (condition2);
+    ... ... ...   }
+while (condition1);
+Flowchart of Nested do-while loop
+flowchart of nested do while loop in c programming
+Example of Nested do-while loop
+Example 2: C program to print the given star pattern.
+*
+**
+***
+****
+*****
+#include <stdio.h>
+int main()
+{   int i=1,j;
+    do
+    {   j=1;
+        do
+        {   printf("*");
+            j++;
+        }while(j <= i);
+        i++;
+        printf("n");
+    }while(i <= 5);
+    return 0;  }
+In this program, nested do-while loop is used to print the star pattern. The outermost loop runs 5 times and for every loop, the innermost loop runs i times which is 1 at first, meaning only one “*” is printed, then on the next loop it’s 2 printing two stars and so on till 5 iterations of the loop executes, printing five stars. This way, the given star pattern is printed.
+Nested for loop
+A for loop inside another for loop is called nested for loop.
+Syntax of Nested for loop
+for (initialization; condition; increment/decrement)
+{   statement(s);
+    for (initialization; condition; increment/decrement)
+    {  statement(s);
+        ... ... ... }
+    ... ... ...   }
+Flowchart of Nested for loop
+flowchart of nested for loop in c programming
+Example of Nested for loop
+Example 3: C program to print all the composite numbers from 2 to a certain number entered by user.
+#include<stdio.h>
+#include<math.h>
+int main()
+{   int i,j,n;
+    printf("Enter a number:");
+    scanf("%d",&n);
+    for(i=2;i<=n;i++)
+    {   for(j=2;j<=(int)pow(i,0.5);j++)
+        {   if(i%j==0)
+            {   printf("%d is compositen",i);
+                break;  }   }    }
+    return 0;  }
+**********************************************************************
+Output
+Enter a number:15
+4 is composite
+6 is composite
+8 is composite
+9 is composite
+10 is composite
+12 is composite
+14 is composite
+15 is composite
+A number is said to be composite if it has at least one factor other than 1 and itself. This program prints all the composite numbers starting from 2 to a certain number n, entered by user. We need to use a nested loop to solve this problem. The outer for loop runs from 2 to n and the inner loop is used to determine whether a number is composite or not. We need to check for that factor starting from 2 to integer part of square root of that number.
+Consider 15, its square root is nearly 3.873. Here, the integer part is 3. Now, if there is a factor of 15 from 2 to 3 then it is composite. Here, 3 is a factor of 15. Hence, 15 is a composite number. 

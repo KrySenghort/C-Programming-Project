@@ -1,0 +1,317 @@
+typedef statement in C
+The typedef is an advance feature in C language which allows us to create an alias or new name for an existing type or user defined type. 
+The syntax of typedef is as follows:
+Syntax: typedef data_type new_name;
+typedef: It is a keyword.
+data_type: It is the name of any existing type or user defined type created using structure/union.
+new_name: alias or new name you want to give to any existing type or user defined type.
+Let's take an example:
+typedef int myint;
+Now myint is an alias of int. From now on we can declare new int variables using myint instead of int keyword.
+myint i = 0; // this statement is equivalent to int i = 0;
+This statement declares and initializes a variable i of type int.
+We can even create more than one alias for the same type. For example:
+typedef int myint, integer;
+This statement creates two aliases for type int namely myint and integer.
+Here are some more examples:
+1
+2
+typedef unsigned long int ulint;
+typedef float real;
+After these two declarations, ulint is an alias of unsigned long int and real is an alias of float.
+We can write typedef declaration anywhere other declarations are allowed. 
+However, it is important to note that the scope of the declarations depends on the location of the typedef statement. 
+If the definition is placed outside all functions then the scope is global and any function can use an alias instead of the original name. 
+On the other hand, if the definition is declared inside a function then the scope is local and the only the function which contains the typedef statement can use an alias.
+Consider the following examples:
+Example 1: Declaring a local alias using typedef
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18
+************************************************************************************************************************************************************************
+#include<stdio.h>
+void foo(void);
+int main()
+{   typedef unsigned char uchar;
+    uchar ch = 'a';
+    printf("ch inside main() : %c\n", ch);
+    foo();
+    return 0; }
+void foo(void)
+{// uchar ch = 'a'; // Error
+    unsigned char ch = 'z';
+    printf("ch inside foo() : %c\n", ch); }
+Expected Output:
+1
+2
+ch inside main() : a
+ch inside foo() : z
+Here typedef definition is inside main() function so we can use alias uchar only inside the main(). 
+Try uncommenting the line 15 and compile the program you will get an error from compiler because alias uchar is not available in the foo() function.
+Example 2: Declaring a global alias using typedef
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+******************************************************************************
+#include<stdio.h>
+typedef unsigned char uchar;
+void foo(void);
+int main()
+{   uchar ch = 'a';
+    printf("ch inside main() : %c\n", ch);
+    foo();
+    return 0;	}
+void foo(void)
+{   uchar ch = 'z';
+    printf("ch inside foo() : %c\n", ch);	}
+Expected Output:
+1
+2
+ch inside main() : a
+ch inside foo() : z
+Here typedef declaration is above all functions so any function can use alias uchar to declare variables of type unsigned char.
+We have seen how to declare aliases for simple types in the following sections we will learn how to define aliases for pointer, functions, structures and unions.
+typedef with a pointer
+typedef int * iptr;
+After this statement iptr is an alias of a pointer to int or (int*). Here is how we can declare an integer pointer using iptr:
+iptr p;
+This declaration is same as:
+int *p;
+Here are some more examples:
+1
+2
+iptr a, *b; // same as int *a, **b;
+iptr arr[10]; // same as int *arr[10];
+In the first declaration, a is a pointer to int and b is pointer to pointer to int. In the second declaration, arr is an array of 10 integer pointers.
+Here is an example:
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+**************************************************************************************************************************************
+#include<stdio.h>
+typedef int * iptr;
+int main()
+{   int a = 99;
+    iptr p; // same as int *p
+    p = &a;
+    printf("%u\n", p);
+    printf("%d\n", *p);
+    return 0;	}
+Expected Output:
+1
+2
+2686788
+99
+typedef with an Array
+typedef int iarr[10];
+After this declaration, iarr is an alias of array of 10 integer elements.
+iarr a, b, c[5]; // same as int a[10], b[10], c[10][5];
+In this declaration, a and b are arrays of 10 integers and c is a 2-D array of dimension 10*5.
+Here is an example:
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+#include<stdio.h>
+typedef int iarr[10];
+int main()
+{   int i;
+ // same as int a[10] = {12,43,45,65,67,87,89,91,14,19}
+    iarr a = {12,43,45,65,67,87,89,91,14,19}; 
+    for(i = 0; i < 10; i++)
+  { printf("a[%d] = %d\n",i ,a[i]);	}
+    return 0;	}
+Expected Output:
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+a[0] = 12
+a[1] = 43
+a[2] = 45
+a[3] = 65
+a[4] = 67
+a[5] = 87
+a[6] = 89
+a[7] = 91
+a[8] = 14
+a[9] = 19
+******************************************************************************
+typedef with a Structure
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+******************************************************************************
+struct book
+{   char title[20];
+    char publisher[20];
+    char author[20];
+    int year;
+    int pages;};
+typedef struct book Book;
+After this declaration, Book is an alias of struct book. So instead of using struct book to declare new structure variables we can use just use Book.
+Book b1 = {"The Alchemist", "TDM Publication" , "Paulo Coelho", 1978, 331 };
+We can also combine structure definition and typedef declaration. The syntax to so is:
+1
+2
+3
+4
+5
+6
+******************************************************************************
+typedef struct tagname 
+{   data_type member1;
+    data_type member1;
+    ...} newname;
+******************************************************************************
+Let's rewrite structure book definition using this new syntax of typedef.
+1
+2
+3
+4
+5
+6
+7
+8
+******************************************************************************
+typedef struct book
+{   char title[20];
+    char publisher[20];
+    char author[20];
+    int year;
+    int pages;} 
+Book;
+Here is the program to demonstrate how to use typedef with structures.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27
+******************************************************************************************************************************************************************
+#include<stdio.h>
+typedef struct book
+{   char title[20];
+    char publisher[20];
+    char author[20];
+    int year;
+   int pages;}
+Book;
+int main()
+{   Book b1 =("The Zahir","Harper Perennial" ,"Paulo Coelho",2005,336	};
+    printf("Title: %s\n", b1.title);
+    printf("Author: %s\n", b1.author);
+    return 0;	}
+Expected Output:
+1
+2
+Title: The Zahir
+Author: Paulo Coelho
+Similarly, we can use typedef with unions.
+typedef and #define
+It is important to mention that typedef is not a preprocessor directive, so its interpretation is handled by the compiler, not by the preprocessor.
+Recall that #define directive allows us to define an expansion for any text on the other hand typedef is used to create alias for any data type.
+However, there are some cases when #define and typedef yield the same result.
+The following is one such case:
+#define directive	typedef declaration
+#define uchar unsigned char	typedef unsigned char uchar;
+statement to test	uchar ch;	uchar ch;
+After translation	unsigned char ch;	unsigned char ch;
+Here is the case when #define and typedef yield different results.
+#define directive	typedef declaration
+#define fp float *	typedef float * fp;
+statement to test	fp a, b, c;	fp a, b, c;
+After translation	float *a, b, c;	float *a, *b, *c;
+In the second case, as soon as preprocessor sees the statement.
+fp a, b, c;
+It replaces the occurrence of fp it replaces it with float *. So the above declaration becomes.
+float *a, b, c;
+On the other hand, typedef has more semantic meaning so the compiler doesn't just replace as preprocessor does.
+The following program demonstrate the difference between #define and typedef.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23
+#include<stdio.h>
+#define ptr int * // replace occurence of ptr by int *
+typedef int * iptr; // iptr is an alias of pointer to int or int*
+int main()
+{   ptr a, b, c; // same as int *a, b, c;
+    iptr p1, p2, p3; // same as int *p1, *p2, *p3
+    b = 10;
+    c = 20;
+    a = &b;
+    p1 = &b;
+    p2 = &c;
+    p3 = &c;
+    printf("Value at a = %d\n", *a); // print value of b
+    printf("Value at p2 = %d\n", *p2); // print value of b
+    return 0;	}
+Expected Output:
+1
+2
+Value at a = 10
+Value at p2 = 20
+How it works:
+When preprocessor goes through the program and sees the declaration:
+ptr a, b, c;
+It replaces ptr with int * , so that the above declaration becomes:
+int *a, b, c;
+where only a is a pointer to int, b and c are just variable of type int.
+On the contrary in the following declaration.
+iptr p1, p2, p3;
+The compiler knows that iptr is an alias to a pointer to int, so p1, p2 and p3 are pointer variables of type int.
+Advantages typedef
+It makes the program more readable. Certainly, Book b1 is more readable and intuitive than writing struct book b1.
+It makes the program portable. Let me explain how .Take a look at the prototypes of sizeof() operator and malloc() function.
+1
+2
+3
+size_t sizeof(type);
+void *malloc(size_t size);
+As you can both prototypes uses type size_t and we have already told you to treat size_t as unsigned int, but that's not entirely true. 
+The C standard says sizeof() must return an integer but leaves it up to the implementation to determine which type to return. 
+The reason for this is that C standards committee decided no choice is likely to be the best for every platform. 
+So they created a new type such as size_t, time_t etc and let the implementation use a typedef to set the name to some specific type. 
+So one system type of size_t can be unsigned int, on another, it can be unsigned long int.

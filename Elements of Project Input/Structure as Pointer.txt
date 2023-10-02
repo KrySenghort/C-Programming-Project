@@ -1,0 +1,86 @@
+Pointers as Structure Member in C
+We can also have a pointer as a member of the structure. For example:
+1
+2
+3
+4
+5
+6
+7
+struct test
+{
+    char name[20];
+    int *ptr_mem;
+};
+struct test t1, *str_ptr = &t1;
+Here ptr_mem is a pointer to int and a member of structure test.
+There are two ways in which we can access the value (i.e address) of ptr_mem:
+Using structure variable - t1.ptr_mem
+Using pointer variable - str_ptr->ptr_mem
+Similarly, there are two ways in which we can access the value pointed to by ptr_mem.
+Using structure variable - *t1.ptr_mem
+Using pointer variable - *str_ptr->ptr_mem
+Since the precedence of dot(.) operator is greater than that of indirection(*) operator, so in the expression *t1.ptr_mem the dot(.) is applied before the indirection(*) operator. Similarly in the expression *str_ptr->ptr_mem, the arrow (->) operator is applied followed by indirection(*) operator.
+The following program demonstrates everything we have learned so far in this lesson.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47
+#include<stdio.h>
+struct student
+{   char *name;
+    int age;
+    char *program;
+    char *subjects[5]; };
+int main()
+{   struct student stu = {
+   "Lucy",
+     2
+    "CS",
+    {"CS-01", "CS-02", "CS-03", "CS-04", "CS-05" 	}                         };
+    struct student *ptr_stu = &stu;
+    int i;
+    printf("Accessing members using structure variable: \n\n");
+    printf("Name: %s\n", stu.name);
+    printf("Age: %d\n", stu.age);
+    printf("Program enrolled: %s\n", stu.program);
+    for(i = 0; i < 5; i++)
+ {  printf("Subject : %s \n", stu.subjects[i]);    }
+    printf("\n\nAccessing members using pointer variable: \n\n");
+    printf("Name: %s\n", ptr_stu->name);
+    printf("Age: %d\n", ptr_stu->age);
+    printf("Program enrolled: %s\n", ptr_stu->program);
+    for(i = 0; i < 5; i++)
+{   printf("Subject : %s \n", ptr_stu->subjects[i]);	}
+ // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20
+Accessing members using structure variable:
+Name: Lucy
+Age: 25
+Program enrolled: CS
+Subject : CS-01
+Subject : CS-02
+Subject : CS-03
+Subject : CS-04
+Subject : CS-05
+Accessing members using pointer variable:
+Name: Lucy
+Age: 25
+Program enrolled: CS
+Subject : CS-01
+Subject : CS-02
+Subject : CS-03
+Subject : CS-04
+Subject : CS-05
+How it works:
+In lines 3-9, a structure student is declared which have four members namely: name, age, program and subjects. The type of members is as follows:
+Name	Type
+name	a pointer to char
+age	int
+program	a pointer to char
+subjects	an array of 5 pointers to char
+In lines 13-18, a variable stu of type struct student is declared and initialized. Since name and program are pointers to char so we can directly assign string literals to them. Similarly, subjects is an array of 5 pointers to char, so it can hold 5 string literals.
+In line 20, a pointer variable ptr_stu of type struct student is declared and assigned the address of stu using & operator.
+From lines 25-27, three printf() statement is used to print name, age and program using structure variable stu.
+In lines 29-32, a for loop is used to loop through all the elements of an array of pointers *subjects[5]. And print the names of the subjects using structure variable.
+From lines 36-38, three printf() statement is used to print name, age and program using pointer variable ptr_stu.
+In lines 40-43, a for loop is used to loop through all the elements of an array of pointers *subjects[5]. And print the names of the subjects using pointer variable.

@@ -1,0 +1,242 @@
+Structure Basics in C
+Structures in C are used to create new data types. So why would we want need to create new data types? Consider the following example:
+Suppose we are creating a program for storing records of the students. A student has many attributes like name, roll no, marks, attendance etc. Some items are strings and some are numbers. Here is the one way to approach this problem.
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38
+#include<stdio.h>
+#include<string.h>
+int main()
+{   char name[20];
+    int roll_no, i;
+    float marks[5];
+    printf("Enter name: ");
+    scanf("%s", name);
+    printf("Enter roll no: ");
+    scanf("%d", &roll_no);
+    printf("\n");
+    for(i = 0; i < 5; i++)
+ {  printf("Enter marks for %d: subject: ", i+1);
+    scanf("%f", &marks[i]); }
+    printf("\nYou entered: \n\n");
+    printf("Name: %s\n", name);
+    printf("roll no: %d\n", roll_no);
+    printf("\n");
+    for(i = 0; i < 5; i++)
+   {printf("Marks in %d subject %f: l\n", i+1, marks[i]);	}
+    // signal to operating system program ran fine
+    return 0;	}
+No doubt using this approach we would be able to store names, roll no and marks of a student. But the problem is that this method is not very scalable. If we want to store more students then the program becomes difficult to handle. The biggest drawback of this method is that it obscure the fact that we are dealing with a single entity - the student.
+Using structure we can solve these kinds of problems easily. The structure allows us to group related data of different types together under a single name. Each data elements (or attributes) are referred to as members.
+Defining Structure
+Syntax:
+1	2	3	4	5	6	7	8
+struct tagname
+{   data_type member1;
+    data_type member2;
+    ...
+    ...
+    data_type memberN;	};
+Here struct is a keyword, which tells C compiler that a structure is being defined. member1, member2 … memberN are members of the structure or just structure members and rmust be declared inside curly braces ({}). Each member declaration is terminated by a semi-colon (;). The tagname is the name of the structure and it is used to declare variables of this structure type. One important thing to note is that the structure definition must always end with a semi-colon (;) just after the closing brace.
+As already said structure provides one more data type in addition to built-in data types. All the variables declared from the structure type will take the form this template.
+Defining a new structure will not reserve any space any memory, memory is reserved only when we declare variables of this structure type. Another important point is that members inside the structure definition are attached to the structure variable, they don’t have any existence without structure variable. member names inside a structure must be different from one another, but the member names of two different structures can be same.
+Let's define a simple structure called the student.
+1	2	3	4	5	6
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;	};
+Here we have defined a structure called student which have three structure members name, roll_no and marks. You can define structure globally and locally. If the structure is global then it must be placed above all the functions, so that any function can use it. On the other hand, if a structure is defined inside a function then only that function can use the structure.
+Creating Structure Variables
+We can't use structure definition in any way unless we declare structure variables.
+1	2	3	4	5	6
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;   };
+There are two ways to declare structure variables:
+With the structure definition
+Using tagname
+Let's start with the first one.
+With the structure definition
+1	2	3	4	5	6
+struct student
+{ char name[20];
+  int roll_no;
+  float marks;	} 
+student1, student2;
+Here student1 and student2 are variables of type struct student. If structure variables are declared while defining structure template then the tagname is optional. This means we can also declare the above structure as:
+1	2	3	4	5	6
+struct
+{   char name[20];
+    int roll_no;
+    float marks;	}
+student1, student2;
+Defining structure this way has several limitations:
+As this structure has no name associated with it, we can't create structure variables of this structure type anywhere else in the program. If it is necessary for you to declare variables of this structure type then you have to write the same template again.
+We can't send these structure variables to other functions.
+Due to the limitations mentioned this method is not widely used.
+Using tagname
+1	2	3	4	5	6
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;	};
+To declare structure variable using tagname use the following syntax:
+Syntax: struct tagname variable_name;
+where variable_name must be a valid identifier.
+Here is how we can create structure variables of type struct student.
+struct student student1;
+We can also declare more than structure variables by separating them with comma(,) sign.
+struct student student1, student2, student3;
+When a variable is declared only then the compiler reserve space in memory. It is important to understand that the members of a structure are stored in the memory in the order in which they are defined. In this case, each structure variable of type student has 3 members namely: name, roll_no, marks. As a result, the compiler will allocate memory sufficient to hold all the members of the structure. So here each structure variable occupies 28 bytes (20+4+4) of memory.
+Note: In this figure, we have assumed that there are no gaps between the members of the structure. As you will see later in this chapter that member of a structure generally leaves some gaps between them.
+Initializing Structure Variables
+To initialize the structure variables we use the same syntax as we used for initializing arrays.
+1	2	3	4	5	6	7	8
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;  } 
+student1 = {"Jim", 14, 89};
+struct student student2 = {"Tim", 10, 82};
+Here the value of members of student1 will have "Jim" for name, 14 for roll_no and 89 for marks. Similarly, the value of members of student2 will be "Tim" for name, 10 for roll_no and 82 for marks.
+The value of members must be placed in the same order and of the same type as defined in the structure template.
+Another important thing to understand is that we are not allowed to initialize members at the time of defining structure.
+1	2	3	4	5	6
+struct student
+{   char name[20] = "Phil";   // invalid
+    int roll_no = 10;         // invalid
+    float marks = 3.14;       // invalid	};
+Defining a structure only creates a template, no memory is allocated until structure variables are created. Hence at this point there no variables called name, roll_no and marks, so how we can store data in a variable which do not exist? We can't.
+If the number of initializers is less than the number of members then the remaining members are given a value of 0. For example:
+struct student student1 = {"Jon"}; is same as
+struct student student1 = {"Jon", 0, 0.0};
+Operation on Structures
+After creating structure definition and structure variables. Obviously, the next logical step is to learn how to access members of a structure.
+The dot (.) operator or membership operator is used to access members of a structure using a structure variable. Here is the syntax:
+Syntax: structure_variable.member_name;
+We can refer to a member of a structure by writing structure variable followed by a dot (.) operator, followed by the member name. For example:
+1	2	3	4	5	6	7	8
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;	};
+struct student student1 = {"Jon", 44, 96};
+To access name of student1 use student1.name, similarly to access roll_no and marks use student1.roll_no and student1.marks respectively. For example, the following statements will display the values of student_1's members.
+1
+2
+3
+printf("Name: %s", student_1.name);
+printf("Name: %d", student_2.roll_no);
+printf("Name: %f", student_1.marks);
+We can use student1.name, student1.roll_no and student1.marks just as any other ordinary variables. They can be read, displayed, assigned values, used inside an expression, passed as arguments to functions etc.
+
+Let's try changing the values of structure members.
+1
+2
+student_1.roll_no = 10; // change roll no of student_1 from 44 to 10
+student_1.marks++;      // increment marks of student_1 by 1
+Recall from the chapter operator precedence and associativity that the precedence of dot(.) operator is greater than that of ++ operator and assignment operator (=). So in the above expression first dot (.) operator is applied in the expression followed by ++ operator.
+Take a look at the following statements.
+scanf("%s", student_1.name);
+Here name member of structure student is an array and array name is a constant pointer to the 0th element of the array. So we don't need to precede student_1.name with & operator. On the other hand in the statement:
+scanf("%d", &student_1.roll_no);
+It is required to precede student_2.roll_no with & operator because roll_no is a variable name, not a pointer. Another point worth noting is that in the above expression dot (.) operator is applied before & operator.
+We can also assign a structure variable to another structure variable of the same type.
+1	2	3	4	5	6	7	8	9	10
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;	};
+struct student student1 = {"Jon", 44, 96}, student2;
+student2 = student1;
+This statement copies student1.name into student2.name, student1.roll_no into student2.roll_no and so on.
+It is important to note that we can't use arithmetic, relational and bitwise operators with structure variables.
+1
+2
+3
+student1 + student2;  // invalid
+student1 == student2; // invalid
+student1 & student2;  // invalid
+The following program demonstrates how we can define a structure and read values of structure members.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49
+#include<stdio.h>
+#include<string.h>
+struct student
+{   char name[20];
+    int roll_no;
+    float marks;	};
+int main()
+{   struct student student_1 = {"Jim", 10, 34.5}, student_2, student_3;
+    printf("Details of student 1\n\n");
+    printf("Name: %s\n", student_1.name);
+    printf("Roll no: %d\n", student_1.roll_no);
+    printf("Marks: %.2f\n", student_1.marks);
+    printf("\n");
+    printf("Enter name of student2: ");
+    scanf("%s", student_2.name);
+    printf("Enter roll no of student2: ");
+    scanf("%d", &student_2.roll_no);
+    printf("Enter marks of student2: ");
+    scanf("%f", &student_2.marks);
+    printf("\nDetails of student 2\n\n");
+    printf("Name: %s\n", student_2.name);
+    printf("Roll no: %d\n", student_2.roll_no);
+    printf("Marks: %.2f\n", student_2.marks);
+    strcpy(student_3.name, "King");
+    student_3.roll_no = ++student_2.roll_no;
+    student_3.marks = student_2.marks + 10;
+    printf("\nDetails of student 3\n\n");
+    printf("Name: %s\n", student_3.name);
+    printf("Roll no: %d\n", student_3.roll_no);
+    printf("Marks: %.2f\n", student_3.marks);
+ // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21
+Details of student 1
+Name: Jim
+Roll no: 10
+Marks: 34.50
+Enter name of student2: jack
+Enter roll no of student2: 33
+Enter marks of student2: 15.21
+Details of student 2
+Name: jack
+Roll no: 33
+Marks: 15.21
+Details of student 3
+Name: King
+Roll no: 34
+Marks: 25.21
+How it works:
+Here we have initialized three variables of type struct student. The first structure variable student_1 is initialized at the time of declaration. The details of the first student is then printed using the printf() statements. The program then asks the user to enter the name, roll_no and marks for structure variable student_2. The details of student_2 are then printed using the printf() statements.
+As we know student_3.name is an array so we can't just assign a string to it, that's why in line 37 a strcpy() function is used to assign a string to student_3.name.
+Since the precedence of dot(.) operator is greater than that of ++ operator. So in the expression ++student_2.roll_no, the dot(.) operator has applied first then the value of student.roll_no is incremented and eventually assigned to student_3.roll_no. Similarly in the expression student_2.marks + 10, as precedence of dot(.) operator is greater than that of + operator, first marks of student_2 is obtained, then it's value is increased by 10 and eventually assigned to student_3.marks. At last details of the student_3 is printed.
+How Structures are stored in Memory
+Members of a structure are always stored in consecutive memory locations but the memory occupied by each member may vary. Consider the following program:
+ 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22
+#include<stdio.h>
+struct book
+{   char title[5];
+    int year;
+    double price;	};
+int main()
+{   struct book b1 = {"Book1", 1988, 4.51};
+    printf("Address of title = %u\n", b1.title);
+    printf("Address of year = %u\n", &b1.year);
+    printf("Address of price = %u\n", &b1.price);
+    printf("Size of b1 = %d\n", sizeof(b1));
+ // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1
+2
+3
+4
+Address of title = 2686728
+Address of year = 2686736
+Address of price = 2686744
+Size of b1 = 24
+In the structure Book title occupies 5 bytes, year occupies 4 bytes and price occupies 8 bytes. So the size of structure variable should be 17 bytes. But, as you can see in the output the size of the variable b1 is 24 bytes, not 17 bytes. Why it so?
+This happens because some systems require the address of certain data types to be a multiple of 2, 4, or 8. For example, some machines store integers only at even addresses, unsigned long int and double at addresses which are multiple of 4 and so on. In our case the address of the name member is 2686728, since it is 5 bytes long, it occupies all addresses from 2686728-2686732.
+The machine in which I am running these sample program stores integer numbers at multiple of 4, that's why the three consecutive bytes (i.e 2686733, 2686734, 2686735) after 2686732 are left unused. These unused bytes are called holes. It is important to note these holes do not belong to any member of the structure, but they do contribute to the overall size of the structure. So the next member year is stored at 2686736 (which is a multiple of 4). It occupies address 4 bytes starting from 2686736 to 2686739. Again, the next four bytes after 2686739, are left unused and eventually price member is stored at address 2686744 (which is a multiple of 8).

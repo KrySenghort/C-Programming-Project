@@ -1,0 +1,105 @@
+The strcpy() Function in C
+The syntax of the strcpy() function is:
+Syntax: char* strcpy (char* destination, const char* source);
+The strcpy() function is used to copy strings. It copies string pointed to by source into the destination. This function accepts two arguments of type pointer to char or array of characters and returns a pointer to the first string i.e destination. Notice that source is preceded by the const modifier because strcpy() function is not allowed to change the source string.
+The following program demonstrates the strcpy() function in action.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32
+#include<stdio.h>
+#include<string.h>
+int main()
+{   char ch_arr1[20];
+    char ch_arr2[20];
+    printf("Enter first string (ch_arr_1): ");
+    gets(ch_arr1);
+    printf("Enter second string(ch_arr_1): ");
+    gets(ch_arr2);
+    printf("\nCopying first string into second... \n\n");
+    strcpy(ch_arr2, ch_arr1); // copy the contents of ch_arr1 to ch_arr2
+    printf("First string (ch_arr_1) = %s\n", ch_arr1);
+    printf("Second string (ch_arr_2) = %s\n", ch_arr2);
+    printf("\nCopying \"Greece\" string into ch_arr1 ... \n\n");
+    strcpy(ch_arr1, "Greece"); // copy Greece to ch_arr1
+    printf("\nCopying \"Slovenia\" string into ch_arr2 ... \n\n");
+    strcpy(ch_arr2, "Slovenia"); // copy Slovenia to ch_arr2
+    printf("First string (ch_arr_1) = %s\n", ch_arr1);
+    printf("Second string (ch_arr_2) = %s\n", ch_arr2);
+ // signal to operating system program ran fine
+    return 0;	}
+Expected Output:
+1	2	3	4	5	6	7	8	9	10	11	12	13
+Enter first string (ch_arr_1): Mexico
+Enter second string(ch_arr_1): South Africa
+Copying first string into second...
+First string (ch_arr_1) = Mexico
+Second string (ch_arr_2) = Mexico
+Copying "Greece" string into ch_arr1 ...
+Copying "Slovenia" string into ch_arr2 ...
+First string (ch_arr_1) = Greece
+Second string (ch_arr_2) = Slovenia
+It is important to note that strcpy() function do not check whether the destination has enough size to store all the characters present in the source. It is the responsibility of the program to make sure that the destination array has enough space to accommodate all the characters of the source string.
+Another important point to note about strcpy() is that you should never pass string literals as a first argument. For example:
+1
+2
+3
+char ch_arr[] = "string array";
+strcpy("destination string", c_arr); // wrong
+Here you are trying to copy the contents of ch_arr to "destination string" which is a string literal. Since modifying a string literal causes undefined behaviour, calling strcpy() in this way may cause the program to crash.
+Let's create our own version of strcpy() function.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14
+char *my_strcpy(char *destination, char *source)
+{   char *start = destination;
+    while(*source != '\0')
+    {   *destination = *source;
+        destination++;
+        source++;  }
+    *destination = '\0'; // add '\0' at the end
+    return start;	}
+How it works:
+The my_strcpy() function accepts two arguments of type pointer to char or (char*) and returns a pointer to the first string.
+In line 18, we have assigned the base address of the destination to start, this is necessary otherwise we will lose track of the address of the beginning of the string.
+In line 20, we have while loop, the while loops copies character from source to destination one by one. Copying stops when source points to the address of the null character ('\0').
+At this point string pointed to by start contains all characters of the source except null character ('\0'). The statement in line 13, appends a null character ('\0') to the string.
+In line 14, the return statement returns the character pointer to the calling function.
+Let's rewrite our previous program, incorporating the definition of my_strcpy() function.
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47
+#include<stdio.h>
+char *my_strcpy(char *destination, char *source);
+int main()
+{   char ch_arr1[20];
+    char ch_arr2[20];
+    printf("Enter first string (ch_arr_1): ");
+    gets(ch_arr1);
+    printf("Enter second string(ch_arr_1): ");
+    gets(ch_arr2);
+    printf("\nCopying first string into second... \n\n");
+    my_strcpy(ch_arr2, ch_arr1); // copy the contents of ch_arr1 to ch_arr2
+    printf("First string (ch_arr_1) = %s\n", ch_arr1);
+    printf("Second string (ch_arr_2) = %s\n", ch_arr2);
+    printf("\nCopying \"Greece\" string into ch_arr1 ... \n");
+    my_strcpy(ch_arr1, "Greece"); // copy Greece to ch_arr1
+    printf("\nCopying \"Slovenia\" string into ch_arr2 ... \n\n");
+    my_strcpy(ch_arr2, "Slovenia"); // copy Slovenia to ch_arr2
+    printf("First string (ch_arr_1) = %s\n", ch_arr1);
+    printf("Second string (ch_arr_2) = %s\n", ch_arr2);
+ // signal to operating system program ran fine
+    return 0;	}
+char *my_strcpy(char *destination, char *source)
+{   char *start = destination;
+    while(*source != '\0')
+  { *destination = *source;
+     destination++;
+     source++;	}
+    *destination = '\0';
+    return start;	}
+Expected Output:
+1	2	3	4	5	6	7	8	9	10	11	12	13
+Enter first string (ch_arr_1): Mexico
+Enter second string(ch_arr_1): South Africa
+Copying first string into second...
+First string (ch_arr_1) = Mexico
+Second string (ch_arr_2) = Mexico
+Copying "Greece" string into ch_arr1 ...
+Copying "Slovenia" string into ch_arr2 ...
+First string (ch_arr_1) = Greece
+Second string (ch_arr_2) = Slovenia
+The output of strcpy() and my_strcpy() is same that means our program is working as expected.

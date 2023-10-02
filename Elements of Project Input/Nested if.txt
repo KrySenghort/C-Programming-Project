@@ -1,0 +1,52 @@
+==>Nested If in C Language
+==>Nested If in C Programming is placing If Statement inside another IF Statement. Nested If in C is helpful if you want to check the condition inside a condtion. If Else Statement prints different statements based on the expression result (TRUE, FALSE). Sometimes we have to check even further when the condition is TRUE. In these situations, we can use these C Nested IF statements, but be careful while using it.
+==>For example, every person is eligible to work if he is 18 years old or above else he is not eligible. However, companies will not give a job to every person. So, we use another IF Statement, also called as Nested If Statement in C, to check his education qualifications or any specific company requirements.
+==>Nested If in C Syntax.
+==>The Nested If in C Programming language Syntax is
+if ( test condition 1)
+{ // If the test condition 1 is TRUE then these it will check for test condition 2
+   if ( test condition 2){
+//  If the test condition 2 is TRUE, these statements execute
+    Test condition 2 True statements;	}
+   else{
+//   If the c test condition 2 is FALSE, then these statements execute
+    Test condition 2 False statements;	}
+else{
+//  If the test condition 1 is FALSE then these statements will be executed
+==> Test condition 1 False statements;}
+- Flow Chart for Nested if in C Programming
+- The flow chart of C Nested If statement is
+- FLOW CHART For Nested If in C Programming
+- If the Test Condition1 is FALSE, STATEMENT3 will execute. When Test Condition1 is TRUE, then C Programming will check for the Test Condition2. If it is TRUE, STATEMENT1 will execute else STATEMENT2. Please refer to C If Else Statement and C IF Statement articles.
+- Nested If in C Programming Example
+- In this Nested If in c program, User can enter his age, and we are going to store it in the variable age. If the age is less than 18, we are going to print two statements.
+- If the condition fails, we will check one more condition (Nested If), and if it succeeds, we print something. When the nested If the condition fails, we print some other thing.
+#include <stdio.h>
+int main()
+{
+ int age;
+ printf("Please Enter Your Age Here:\n");
+ scanf("%d",&age);
+ if ( age < 18 )
+ {
+  printf("You are Minor.\n");
+  printf("Not Eligible to Work");
+ }
+ else
+ {
+  if (age >= 18 && age <= 60 ) 
+   { 
+    printf("You are Eligible to Work \n"); 
+    printf("Please fill in your details and apply\n"); 
+   } 
+  else 
+   { 
+    printf("You are too old to work as per the Government rules\n");
+    printf("Please Collect your pension! \n");
+   } }
+ return 0;}
+Within this Nested If in C example, If the age of a person is less than 18, he is not eligible to work. If the age is greater than or equal to 18, then the first condition fails, it will check the else statement.
+In the Else statement, there is another if condition called Nested If in C.
+In this example, the Nested IF Statement checks the person’s age greater than or equal to 18 and less than or equal to 60. When the condition is TRUE, then he can apply for the job.
+If the condition is FALSE, then the statement – he is too old to work as per the government.
+OUTPUT 1: Enter the age = 14. It means First If condition is TRUE
